@@ -1,0 +1,54 @@
+Linux コマンド一覧
+pwd　 自分が今どのディレクトリにいるか調べる
+mkdir 　新しいからのディレクトリ（フォルダ）を作成する
+dir 　今いるディレクトリの中身を調べる
+cd　 改装を移動する
+touch 　からのファイルを作る。ファイルの最終アクセス日時、更新日時を変更する
+cd/どっか/どっか　絶対パス
+cd ../　１つ戻る
+cd ../etc　１つ前に戻ってetcに行く
+cp index.html about.html　　インデックスをコピーしてアバウトを作る
+mv index.html images/　インデックスをイメージに移動する
+mv index.html about.html 名前を変えることもできる
+rm index.html　削除する
+cat text1.txt text2.txt　両方の内容を表示する
+
+
+Git　コマンド
+git init	gitの初期化（リポジトリを作成）
+git status	gitのステータスを確認
+git add	ステージングエリアにコミット用のファイルを上げる
+git commit -m "コミットメッセージ"	メッセージをつけてローカルリポジトリにコミットする
+git log	コミットの履歴ログを見る
+git remote add origin URL	リモートリポジトリのURLを追加する
+git push -u origin master	リモートリポジトリにプッシュする
+git pull origin master	リモートリポジトリの変更点をプルする
+git diff HEAD	最新のコミットと変更点の差分を見る
+git checkout -- target	まだコミットしていない内容の最新コミット状態まで戻す
+git branch ブランチ名	ブランチを作成する
+git checkout ブランチ名	ブランチを切り替える
+git rm ファイル名	ファイルの削除
+git merge ブランチ名	今いるブランチに対象ブランチをマージする
+git branch -d ブランチ名	ブランチを削除する
+
+mysql
+ログインmysql　 -u　dbuser 　-p 
+テーブル内を見る
+show tables
+コマンド一覧
+mysql --help
+切り替え
+use データベース名;
+ユーザーを削除
+DROP USER ユーザ名;
+テーブルを削除
+DROP TABLE IF EXISTS ※※※;
+テーブル要素を表示
+describe users;
+テーブル内を表示
+select * from users;
+テーブル内データを削除
+delete from テーブル名　where 条件式
+ファイルのインポート
+mysql> USE データベース名
+mysql> SOURCE ファイル名.sql

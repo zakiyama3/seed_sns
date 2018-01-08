@@ -58,6 +58,17 @@ if (isset($_GET['action']) && $_GET['action']  == 'rewrite'){
 // $errorという変数が存在してなかった場合、入力が正常と認識
     if (!isset($error)){
 
+      //画像の拡張子チェック
+      //jpg,png,gifはOK
+      //substr...文字列から範囲指定して一部分の文字を切り出す関数
+      //substr(文字列、切り出す文字のスタートの数)マイナスの場合は、末尾からn文字目
+      //例）１．pngがファイル名の場合、$extにはpngが代入される。
+
+
+      $ext = substr($_FILES['picture_path']['name'],-3);
+
+      if(($ext == 'png') || ($ext == 'jpg') || ($ext == 'gif')){
+
       //画像のアップロード処理
       //例）eriko1.pngを指定したとき　$picture_nameの中身は20171222142530eriko1.pngというような文字列が代入される。
       //ファイル名の決定
@@ -81,6 +92,10 @@ if (isset($_GET['action']) && $_GET['action']  == 'rewrite'){
     // これ以下のコードを無駄に処理しないように、このページの処理を終了させる。
       exit();
 
+      }else{
+        $error["image"] = 'type';
+
+      }
 
     }
 
@@ -179,6 +194,12 @@ if (isset($_GET['action']) && $_GET['action']  == 'rewrite'){
             <label class="col-sm-4 control-label">プロフィール写真</label>
             <div class="col-sm-8">
               <input type="file" name="picture_path" class="form-control">
+
+              <?php if(isset($error["image"]) && $error["image"]=='type'){ ?>
+              <p class="error">*　画像ファイルを選択してください。</p>
+              <?php } ?>
+
+
             </div>
           </div>
 
