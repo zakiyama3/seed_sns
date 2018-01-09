@@ -1,3 +1,38 @@
+<?php 
+
+//POST送信されていたら
+ require('dbconnect.php');
+if (isset($_POST) && !empty($_POST)){
+  //認証処理
+  try{
+  //メンバーズテーブルでテーブルの中からメールアドレスとパスワードが入力されたものと合致する
+  //データを取得
+  //暗号化したパスワードを元に戻すのではなく、再度パスワードを暗号化する。
+  $sql = "SELECT * FROM `members` WHERE `email`=? AND `password`=?";
+
+  //SQL文実行
+  //パスワードは、入力されたものを暗号化した上で使用する
+  $data = array($_POST["email"],sha1($_POST["password"]));
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute($data);
+
+  //1行取得
+  $members = $stmt->fetch(PDO::FETCH_ASSOC);
+  echo "</pre>";
+  var_dump($members);
+  echo "</pre>";
+
+  }catch(Exception $e){
+
+
+  }
+
+}
+
+
+ ?>
+
+
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -64,8 +99,8 @@
   </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="../assets/js/jquery-3.1.1.js"></script>
-    <script src="../assets/js/jquery-migrate-1.4.1.js"></script>
-    <script src="../assets/js/bootstrap.js"></script>
+    <script src="assets/js/jquery-3.1.1.js"></script>
+    <script src="assets/js/jquery-migrate-1.4.1.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
   </body>
 </html>
