@@ -2,6 +2,7 @@
 <?php  
 session_start();  //SESSIONを使うときは絶対に必要
 
+require('../dbconnect.php');
 
 //書き直し処理（check.phpで書き直し、というボタンが押されたとき）
 if (isset($_GET['action']) && $_GET['action']  == 'rewrite'){
@@ -58,12 +59,35 @@ if (isset($_GET['action']) && $_GET['action']  == 'rewrite'){
 // $errorという変数が存在してなかった場合、入力が正常と認識
     if (!isset($error)){
 
-      //画像の拡張子チェック
-      //jpg,png,gifはOK
-      //substr...文字列から範囲指定して一部分の文字を切り出す関数
-      //substr(文字列、切り出す文字のスタートの数)マイナスの場合は、末尾からn文字目
-      //例）１．pngがファイル名の場合、$extにはpngが代入される。
+      //emailの重複チェック
+      //DBに同じemailの登録があるか確認
+      //COUNT() SQL文の関数。ヒットした数を取得。
+      //as 別名　取得したデータに別な名前をつけて扱いやすいようにする
+      try{
+        //検索条件にヒットした件数を取得するSQL文
+        $sql = "SELECT COUNT(*) as `cnt` FROM `members` WHERE `email` =?";
 
+        //sql文実行;
+        $data = array($_POST["email"]);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+
+        //件数取得
+        $count = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($count['cnt'] > 0){
+          //重複エラー
+          $error['email'] = "duplicated";
+
+        }
+
+      }catch(Exception $e){
+
+      }
+
+
+
+      if(!isset($error)){
 
       $ext = substr($_FILES['picture_path']['name'],-3);
 
@@ -97,13 +121,15 @@ if (isset($_GET['action']) && $_GET['action']  == 'rewrite'){
 
       }
 
+      }
+
     }
 
+  }
 
+  ?>
 
- }
-
- ?>
+    
 
 
 <html lang="ja">
@@ -168,8 +194,8 @@ if (isset($_GET['action']) && $_GET['action']  == 'rewrite'){
             <label class="col-sm-4 control-label">メールアドレス</label>
             <div class="col-sm-8">
               <input type="email" name="email" class="form-control" placeholder="例： seed@nex.com" value="<?php echo $email; ?>">
-                 <?php if(isset($error["email"]) && $error["email"]=='blank'){ ?>
-                 <p class="error">*　emailを入力してください。</p>
+                 <?php if(isset($error["email"]) && $error["email"]=='duplicated'){ ?>
+                 <p class="error">*　入力されたEmailは登録済みです。</p>
                  <?php } ?>
 
             </div>
