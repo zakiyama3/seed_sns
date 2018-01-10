@@ -2,7 +2,8 @@
 session_start();
 
 //クッキー情報が存在してたら（自動ログイン）
-//$_POSTにログイン情報を保存します。
+//２回目のログイン時のif文。$_POSTにログイン情報を保存します。
+//３回目はスキップされて送信済みのif文を実行する。
 if(isset($_COOKIE["email"]) && !empty($_COOKIE["email"])){
   $_POST["email"] = $_COOKIE["email"];
   $_POST["password"] = $_COOKIE["password"];
