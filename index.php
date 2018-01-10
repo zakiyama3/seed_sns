@@ -5,14 +5,6 @@
   require('dbconnect.php');
 
 
-  // $sql = 'SELECT * FROM `survey`; ';
-
-  // // SQL文を実行する準備
-  // // ->　アロー演算子
-  // $stmt = $dbh->prepare($sql);
-
-  //   // SQL文を実行
-  // $stmt->execute();
 
 
   //ログインチェック
@@ -25,6 +17,41 @@
     header("Location: login.php");
     exit();
   }
+
+  //----POST送信されていたら、つぶやきをINSERTで保存
+
+  if (isset($_POST) && !empty($_POST)){
+
+  
+
+  $tweet = $_POST['tweet'];
+  $member_id = $_SESSION['id'];
+
+
+
+
+  //認証処理
+  try{
+
+  $sql = "INSERT INTO `tweets`(`tweet`,`member_id`,`reply_tweet_id`,`created`,`modified`) VALUES(?,?,-1,now(),now())";
+
+       //SQL文実行
+       // sha1　暗号化を行う関数
+      $data = array($tweet,$member_id);
+      $stmt = $dbh->prepare($sql);
+
+      var_dump($data); 
+      $stmt->execute($data);
+ 
+
+    }catch(Exception $e){
+      echo 'SQL実行エラー:'.$e->getMessage();
+  exit();
+
+
+  }
+   }
+
   
   //----表示用のデータ取得-----
   try{
@@ -39,6 +66,9 @@
   }catch(Exception $e){
 
   }
+
+
+
 
 
 
@@ -90,11 +120,12 @@
     <div class="row">
       <div class="col-md-4 content-margin-top">
         <legend>ようこそ<?php echo $login_member["nick_name"]; ?>さん！</legend>
-        <form method="post" action="" class="form-horizontal" role="form">
+        <form method="post" action="" class="form-horizontal" role="form" name="action">
             <!-- つぶやき -->
             <div class="form-group">
               <label class="col-sm-4 control-label">つぶやき</label>
               <div class="col-sm-8">
+                 <input type="hidden" name="tweet_id" value="">
                 <textarea name="tweet" cols="50" rows="5" class="form-control" placeholder="例：Hello World!"></textarea>
               </div>
             </div>
